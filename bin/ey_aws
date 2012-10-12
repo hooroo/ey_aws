@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require File.expand_path('../../lib/ey_aws', __FILE__)
+require 'pp'
+
+newco = EYAWS.new
+pp newco[:environments]
