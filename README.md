@@ -1,30 +1,39 @@
 # ey_aws
 
-ey_aws will connect to and retrieve environment and instance data from both EngineYard and AWS to be munged together, this allows us to view which environments we have and metadata for each instance which makes it up. It can be useful to find out instance sizes, IP addresses, attached storage and an estimated cost per hour for each running instance.
+ey_aws will connect EngineYard and AWS to and retrieve environment and instance
+data from both, this allows us to view which environments we have and metadata
+for each instance which makes up each enironment. It can be useful to find out
+instance sizes, IP addresses and attached storage for each running instance.
 
 ## Installation
+
+    gem install ey_aws
+
 ## Usage
 
-In its simplest form, this gem will collect information from EY and AWS, then munge the results together - resulting in a hash describing all of our environments, this hash can then be queried and manipulated in a programmatic way in your scripts. Before execution you must ensure the environment variables ACCESS_KEY_ID/SECRET_ACCESS_KEY are defined for AWS authentication, and EY_CLOUD_TOKEN for EngineYard. 
+This gem may be used from the command line to display a formatted Hash
+describing all your environments and instances. If running from the command
+line you must set some environment variables before executing ey_aws.
 
-  export ACCESS_KEY_ID='...'
-  export SECRET_ACCESS_KEY='...'
-  export EY_CLOUD_TOKEN='...'
+ACCESS_KEY_ID/SECRET_ACCESS_KEY are required for AWS authentication, and EY_CLOUD_TOKEN for EngineYard.
 
-Retrieving the EY/AWS info each time adds a considerable amount of time to the script execution (generally up to 90 secs), so a crude form of caching is enabled by default - any time the refresh method is run it will dump the environments hash to '' in the current working directory. The class will then load the results from this file next time it is initialized unless the 'refresh' method is explicitly called.
+You can find EY_CLOUD_TOKEN in your ~/.eyrc
 
-Command line:
+    export ACCESS_KEY_ID='...'
+    export SECRET_ACCESS_KEY='...'
+    export EY_CLOUD_TOKEN='...'
+    ey_aws
 
-A simple command line client is provided to allow you to spit out the environments hash.
+Or from your application
 
-$ 
+    require 'ey_aws'
 
-Library:
+    data = EYAWS.new({
+      :access_key_id => 'AWS_ACCESS_KEY',
+      :secret_access_key => 'AWS_SECRET_KEY',
+      :ey_cloud_token => 'EY_CLOUD_TOKEN' })
 
-require ''
-
- = .new
-pp .environments
+    pp data[:environments]
 
 ## Output
 
@@ -47,4 +56,4 @@ pp .environments
 
 ## Testing
 
-bundle exec rake spec
+    bundle exec rake spec
