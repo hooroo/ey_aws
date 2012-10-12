@@ -142,4 +142,4 @@ for a reasonably sized environment. This may be able to be helped by memoising t
 
 ## Copyright
 
-Copyright (c) 2012 James Martelletti. See LICENSE for details.
+Copyright (c) 2012 Hooroo. See LICENSE for details.
