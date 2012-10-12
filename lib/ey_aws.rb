@@ -1,4 +1,3 @@
-#require 'rest'
 require 'rest_client'
 require 'json'
 require 'aws-sdk'
