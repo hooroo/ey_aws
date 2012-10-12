@@ -1,4 +1,5 @@
-require 'rest'
+#require 'rest'
+require 'rest_client'
 require 'json'
 require 'aws-sdk'
 
@@ -29,7 +30,7 @@ class EYAWS < Hash
     raise "No EY_CLOUD_TOKEN supplied"    if ey_cloud_token.nil?
 
     # Get EY environment info
-    @data = JSON.parse(REST.get(URL, 'X-EY-Cloud-Token' => ey_cloud_token).body, :symbolize_names => true)
+    @data = JSON.parse(RestClient.get(URL, 'X-EY-Cloud-Token' => ey_cloud_token).body, :symbolize_names => true)
 
     # Figure out the region each EY host lives in
     @data[:environments].each do |e|

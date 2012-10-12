@@ -58,7 +58,7 @@ describe EYAWS do
       environment[:name].should == "environment_name"
     end
 
-    it "finds host attributes" do
+    it "finds instance attributes" do
       environment[:instances].first[:id].should == 'i-abcd1234'
     end
 

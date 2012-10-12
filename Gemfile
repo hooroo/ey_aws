@@ -1,10 +1,10 @@
 source :rubygems
 
-gem "aws-sdk"
-gem "rest"
-gem "rake"
+gem 'aws-sdk'
+gem 'rest-client'
+gem 'rake'
 
 group :test do
-  gem "rspec"
-  gem "webmock"
+  gem 'rspec'
+  gem 'webmock'
 end
