@@ -128,3 +128,18 @@ Or from your application
 ## Testing
 
     bundle exec rake spec
+
+## Alternatives
+
+An alternative to this gem is the [engineyard-metadata](https://github.com/seamusabshere/engineyard-metadata)
+gem which also provides similar functionality, engineyard-metadata also supports
+returning local data from the chef dna.json file when executed from an EC2 instance.
+
+## Known Issues
+
+Y U SO SLOW? It couldn't hurt to help speed this library up, it will generally take about 60 seconds
+for a reasonably sized environment. This may be able to be helped by memoising the additional AWS calls.
+
+## Copyright
+
+Copyright (c) 2012 James Martelletti. See LICENSE for details.
