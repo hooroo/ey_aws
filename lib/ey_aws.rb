@@ -5,8 +5,8 @@ require 'aws-sdk'
 class EYAWS < Hash
   attr_reader :environments
 
-  URL               = 'https://cloud.engineyard.com/api/v2/environments'
-  AWS_ATTRIBUTES    = [
+  EY_URL         = 'https://cloud.engineyard.com/api/v2/environments'
+  AWS_ATTRIBUTES = [
     :ami_launch_index,:architecture, :client_token, :dns_name, :hypervisor,
     :id, :image_id, :instance_type, :ip_address, :kernel_id,
     :key_name, :launch_time, :monitoring, :owner_id, :platform,
@@ -29,7 +29,7 @@ class EYAWS < Hash
     raise "No EY_CLOUD_TOKEN supplied"    if ey_cloud_token.nil?
 
     # Get EY environment info
-    @data = JSON.parse(RestClient.get(URL, 'X-EY-Cloud-Token' => ey_cloud_token).body, :symbolize_names => true)
+    @data = JSON.parse(RestClient.get(EY_URL, 'X-EY-Cloud-Token' => ey_cloud_token).body, :symbolize_names => true)
 
     # Figure out the region each EY host lives in
     @data[:environments].each do |e|
@@ -56,12 +56,17 @@ class EYAWS < Hash
   end
 
   private
+  def map_attributes(attributes, data)
+    mapped_attributes = {}
+    attributes.each do |attr|
+      mapped_attributes[attr] = data.send(attr.to_s) if data.respond_to?(attr.to_s)
+    end
+    mapped_attributes
+  end
+
   def add_aws_info(inst)
     # Grab all our aws attributes
-    aws_attributes = {}
-    AWS_ATTRIBUTES.each do |attr|
-      aws_attributes[attr] = inst.send(attr.to_s)
-    end
+    aws_attributes = map_attributes(AWS_ATTRIBUTES, inst)
 
     # Find the instance to attach this stuff to
     instance = @data[:environments].map { |e|
@@ -71,17 +76,10 @@ class EYAWS < Hash
     # Now grab all the block attributes
     block_devices = []
     inst.block_device_mappings.each do |mnt, device|
-      block_device = {}
-      AWS_DEVICE_ATTRIBUTES.map do |dattr|
-        block_device[dattr] = device.send(dattr.to_s)
-      end
+      block_device = map_attributes(AWS_DEVICE_ATTRIBUTES, device)
 
       # And the volume...
-      volume = {}
-      AWS_VOLUME_ATTRIBUTES.map do |vattr|
-        volume[vattr] = device.volume.send(vattr.to_s)
-      end
-      block_device[:volume] = volume
+      block_device[:volume] = map_attributes(AWS_VOLUME_ATTRIBUTES, device.volume)
 
       block_devices << block_device
     end
