@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require File.expand_path('../../lib/ey_aws', __FILE__)
-require 'pp'
+require 'json'
 
-newco = EYAWS.new
-pp newco[:environments]
+data = EYAWS.new
+puts JSON.pretty_generate(data)
